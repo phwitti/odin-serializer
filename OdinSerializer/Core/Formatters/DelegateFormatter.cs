@@ -267,21 +267,10 @@ namespace OdinSerializer
             {
                 Type targetType = methodInfo.DeclaringType;
 
-                if (typeof(UnityEngine.Object).IsAssignableFrom(targetType))
+                if (object.ReferenceEquals(target, null))
                 {
-                    if ((target as UnityEngine.Object) == null)
-                    {
-                        reader.Context.Config.DebugContext.LogWarning("Method '" + declaringType.GetNiceFullName() + "." + methodInfo.GetNiceName() + "' of delegate to deserialize is an instance method, but Unity object target of type '" + targetType.GetNiceFullName() + "' was null on deserialization. Did something destroy it, or did you apply a delegate value targeting a scene-based UnityEngine.Object instance to a prefab?");
-                        return;
-                    }
-                }
-                else
-                {
-                    if (object.ReferenceEquals(target, null))
-                    {
-                        reader.Context.Config.DebugContext.LogWarning("Method '" + declaringType.GetNiceFullName() + "." + methodInfo.GetNiceName() + "' of delegate to deserialize is an instance method, but no valid instance target of type '" + targetType.GetNiceFullName() + "' was in the serialization data. Has something been renamed since serialization?");
-                        return;
-                    }
+                    reader.Context.Config.DebugContext.LogWarning("Method '" + declaringType.GetNiceFullName() + "." + methodInfo.GetNiceName() + "' of delegate to deserialize is an instance method, but no valid instance target of type '" + targetType.GetNiceFullName() + "' was in the serialization data. Has something been renamed since serialization?");
+                    return;
                 }
 
                 value = (T)(object)Delegate.CreateDelegate(delegateType, target, methodInfo, false);

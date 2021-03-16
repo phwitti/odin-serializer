@@ -146,7 +146,7 @@ namespace OdinSerializer
                                     return true;
                                 }
 
-                                return member.IsDefined<SerializeField>(false) || member.IsDefined<OdinSerializeAttribute>(false) || (UnitySerializationUtility.SerializeReferenceAttributeType != null && member.IsDefined(UnitySerializationUtility.SerializeReferenceAttributeType, false));
+                                return member.IsDefined<SerializeField>(false) || member.IsDefined<OdinSerializeAttribute>(false);
                             });
                         }
                     }
@@ -191,7 +191,7 @@ namespace OdinSerializer
                                     return true;
                                 }
 
-                                return member.IsDefined<SerializeField>(false) || member.IsDefined<OdinSerializeAttribute>(false) || (UnitySerializationUtility.SerializeReferenceAttributeType != null && member.IsDefined(UnitySerializationUtility.SerializeReferenceAttributeType, false));
+                                return member.IsDefined<SerializeField>(false) || member.IsDefined<OdinSerializeAttribute>(false);
                             });
                         }
                     }

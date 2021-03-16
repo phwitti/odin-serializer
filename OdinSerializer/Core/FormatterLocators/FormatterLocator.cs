@@ -79,27 +79,10 @@ namespace OdinSerializer
                 {
                     var name = ass.GetName().Name;
 
-                    if (name.StartsWith("System.") || name.StartsWith("UnityEngine") || name.StartsWith("UnityEditor") || name == "mscorlib")
+                    if (name.StartsWith("System.") || name == "mscorlib")
                     {
                         // Filter out various core .NET libraries and Unity engine assemblies
                         continue;
-                    }
-                    else if (ass.GetName().Name == FormatterEmitter.PRE_EMITTED_ASSEMBLY_NAME || ass.IsDefined(typeof(EmittedAssemblyAttribute), true))
-                    {
-                        // Only include pre-emitted formatters if we are on an AOT platform.
-                        // Pre-emitted formatters will not work in newer .NET runtimes due to
-                        // lacking private member access privileges, but when compiled via
-                        // IL2CPP they work fine.
-
-#if UNITY_EDITOR
-                        continue;
-#else
-                        if (EmitUtilities.CanEmit)
-                        {
-                            // Never include pre-emitted formatters if we can emit on the current platform
-                            continue;
-                        }
-#endif
                     }
 
                     foreach (var attrUncast in ass.SafeGetCustomAttributes(typeof(RegisterFormatterAttribute), true))
