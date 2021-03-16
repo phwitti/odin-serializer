@@ -21,7 +21,6 @@ namespace OdinSerializer
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using UnityEngine;
     using Utilities;
 
     /// <summary>
@@ -47,7 +46,7 @@ namespace OdinSerializer
                     return new JsonDataWriter(stream, context);
 
                 case DataFormat.Nodes:
-                    Debug.LogError("Cannot automatically create a writer for the format '" + DataFormat.Nodes + "', because it does not use a stream.");
+                    //Debug.LogError("Cannot automatically create a writer for the format '" + DataFormat.Nodes + "', because it does not use a stream.");
                     return null;
 
                 default:
@@ -73,7 +72,7 @@ namespace OdinSerializer
                     return new JsonDataReader(stream, context);
 
                 case DataFormat.Nodes:
-                    Debug.LogError("Cannot automatically create a reader for the format '" + DataFormat.Nodes + "', because it does not use a stream.");
+                    //Debug.LogError("Cannot automatically create a reader for the format '" + DataFormat.Nodes + "', because it does not use a stream.");
                     return null;
 
                 default:

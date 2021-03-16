@@ -24,7 +24,6 @@ namespace OdinSerializer.Utilities
     using System.Linq;
     using System.Reflection;
     using System.Text;
-    using UnityEngine;
 
     /// <summary>
     /// Type method extensions.
@@ -33,7 +32,6 @@ namespace OdinSerializer.Utilities
     {
         private static readonly Func<float, float, bool> FloatEqualityComparerFunc = FloatEqualityComparer;
         private static readonly Func<double, double, bool> DoubleEqualityComparerFunc = DoubleEqualityComparer;
-        private static readonly Func<Quaternion, Quaternion, bool> QuaternionEqualityComparerFunc = QuaternionEqualityComparer;
 
         private static readonly object GenericConstraintsSatisfaction_LOCK = new object();
         private static readonly Dictionary<Type, Type> GenericConstraintsSatisfactionInferredParameters = new Dictionary<Type, Type>();
@@ -519,11 +517,6 @@ namespace OdinSerializer.Utilities
             return a == b;
         }
 
-        private static bool QuaternionEqualityComparer(Quaternion a, Quaternion b)
-        {
-            return a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w;
-        }
-
         /// <summary>
         /// Gets an equality comparer delegate used to compare the equality of values of a given type. In order, this will be:
         ///
@@ -542,8 +535,6 @@ namespace OdinSerializer.Utilities
                 return (Func<T, T, bool>)(object)FloatEqualityComparerFunc;
             else if (typeof(T) == typeof(double))
                 return (Func<T, T, bool>)(object)DoubleEqualityComparerFunc;
-            else if (typeof(T) == typeof(Quaternion))
-                return (Func<T, T, bool>)(object)QuaternionEqualityComparerFunc;
 
             Func<T, T, bool> result = null;
             MethodInfo equalityMethod;

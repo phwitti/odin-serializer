@@ -27,7 +27,6 @@ namespace OdinSerializer
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using UnityEngine;
 
 #if CAN_EMIT
 
@@ -130,8 +129,8 @@ namespace OdinSerializer
         public static IFormatter GetEmittedFormatter(Type type, ISerializationPolicy policy)
         {
 #if !CAN_EMIT
-        Debug.LogError("Cannot use Reflection.Emit on the current platform. The FormatterEmitter class is currently disabled. Check whether emitting is currently possible with EmitUtilities.CanEmit.");
-        return null;
+            // Debug.LogError("Cannot use Reflection.Emit on the current platform. The FormatterEmitter class is currently disabled. Check whether emitting is currently possible with EmitUtilities.CanEmit.");
+            return null;
 #else
             if (type == null)
             {

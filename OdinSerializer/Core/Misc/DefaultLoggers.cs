@@ -32,7 +32,7 @@
                     {
                         if (unityLogger == null)
                         {
-                            unityLogger = new CustomLogger(UnityEngine.Debug.LogWarning, UnityEngine.Debug.LogError, UnityEngine.Debug.LogException);
+                            unityLogger = new CustomLogger(System.Console.WriteLine, System.Console.WriteLine, System.Console.WriteLine);
                         }
                     }
                 }

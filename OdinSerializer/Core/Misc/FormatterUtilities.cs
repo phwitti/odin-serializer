@@ -25,7 +25,6 @@ namespace OdinSerializer
     using System.Linq;
     using System.Reflection;
     using System.Runtime.Serialization;
-    using UnityEngine;
 
     /// <summary>
     /// Provides an array of utility methods which are commonly used by serialization formatters.
@@ -132,47 +131,6 @@ You probably need to assign the nullValue variable of the {0} script in the insp
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Creates a fake Unity null value of a given type, for the given <see cref="UnityEngine.Object"/>-derived owning type.
-        /// <para />
-        /// Unity uses these kinds of values to indicate missing object references.
-        /// </summary>
-        /// <param name="nullType">Type of the null value.</param>
-        /// <param name="owningType">Type of the owning value. This is the value which changes the <see cref="MissingReferenceException"/> which you get.</param>
-        /// <returns>A fake Unity null value of a given type.</returns>
-        /// <exception cref="System.ArgumentNullException">The nullType or owningType parameter is null.</exception>
-        /// <exception cref="System.ArgumentException">
-        /// The type given in the nullType parameter is not a Unity object.
-        /// or
-        /// The type given in the owningType parameter is not a Unity object.
-        /// </exception>
-        public static UnityEngine.Object CreateUnityNull(Type nullType, Type owningType)
-        {
-            if (nullType == null || owningType == null)
-            {
-                throw new ArgumentNullException();
-            }
-
-            if (nullType.ImplementsOrInherits(typeof(UnityEngine.Object)) == false)
-            {
-                throw new ArgumentException("Type " + nullType.Name + " is not a Unity object.");
-            }
-
-            if (owningType.ImplementsOrInherits(typeof(UnityEngine.Object)) == false)
-            {
-                throw new ArgumentException("Type " + owningType.Name + " is not a Unity object.");
-            }
-
-            UnityEngine.Object nullValue = (UnityEngine.Object)FormatterServices.GetUninitializedObject(nullType);
-
-            if (UnityObjectRuntimeErrorStringField != null)
-            {
-                UnityObjectRuntimeErrorStringField.SetValue(nullValue, string.Format(CultureInfo.InvariantCulture, UnityObjectRuntimeErrorString, owningType.Name));
-            }
-
-            return nullValue;
         }
 
         /// <summary>
@@ -288,18 +246,18 @@ You probably need to assign the nullValue variable of the {0} script in the insp
         {
             var map = GetSerializableMembers(type, policy).ToDictionary(n => n.Name, n => n);
 
-            foreach (var member in map.Values.ToList())
-            {
-                var serializedAsAttributes = member.GetAttributes<UnityEngine.Serialization.FormerlySerializedAsAttribute>();
+            // foreach (var member in map.Values.ToList())
+            // {
+            //     var serializedAsAttributes = member.GetAttributes<UnityEngine.Serialization.FormerlySerializedAsAttribute>();
 
-                foreach (var attr in serializedAsAttributes)
-                {
-                    if (map.ContainsKey(attr.oldName) == false)
-                    {
-                        map.Add(attr.oldName, member);
-                    }
-                }
-            }
+            //     foreach (var attr in serializedAsAttributes)
+            //     {
+            //         if (map.ContainsKey(attr.oldName) == false)
+            //         {
+            //             map.Add(attr.oldName, member);
+            //         }
+            //     }
+            // }
 
             return map;
         }

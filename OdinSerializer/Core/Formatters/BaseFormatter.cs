@@ -64,17 +64,11 @@ namespace OdinSerializer
         /// </summary>
         protected static readonly bool IsValueType = typeof(T).IsValueType;
 
-        protected static readonly bool ImplementsISerializationCallbackReceiver = typeof(T).ImplementsOrInherits(typeof(UnityEngine.ISerializationCallbackReceiver));
         protected static readonly bool ImplementsIDeserializationCallback = typeof(T).ImplementsOrInherits(typeof(IDeserializationCallback));
         protected static readonly bool ImplementsIObjectReference = typeof(T).ImplementsOrInherits(typeof(IObjectReference));
 
         static BaseFormatter()
         {
-            if (typeof(T).ImplementsOrInherits(typeof(UnityEngine.Object)))
-            {
-                DefaultLoggers.DefaultLogger.LogWarning("A formatter has been created for the UnityEngine.Object type " + typeof(T).Name + " - this is *strongly* discouraged. Unity should be allowed to handle serialization and deserialization of its own weird objects. Remember to serialize with a UnityReferenceResolver as the external index reference resolver in the serialization context.\n\n Stacktrace: " + new System.Diagnostics.StackTrace().ToString());
-            }
-
             MethodInfo[] methods = typeof(T).GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             
             List<SerializationCallback> callbacks = new List<SerializationCallback>();
@@ -247,20 +241,6 @@ namespace OdinSerializer
                     v.OnDeserialization(this);
                     value = (T)v;
                 }
-
-                if (ImplementsISerializationCallbackReceiver)
-                {
-                    try
-                    {
-                        UnityEngine.ISerializationCallbackReceiver v = value as UnityEngine.ISerializationCallbackReceiver;
-                        v.OnAfterDeserialize();
-                        value = (T)v;
-                    }
-                    catch (Exception ex)
-                    {
-                        context.Config.DebugContext.LogException(ex);
-                    }
-                }
             }
 
             return value;
@@ -280,21 +260,6 @@ namespace OdinSerializer
                 try
                 {
                     OnSerializingCallbacks[i](ref value, context.StreamingContext);
-                }
-                catch (Exception ex)
-                {
-                    context.Config.DebugContext.LogException(ex);
-                }
-            }
-
-            if (ImplementsISerializationCallbackReceiver)
-            {
-                try
-                {
-
-                    UnityEngine.ISerializationCallbackReceiver v = value as UnityEngine.ISerializationCallbackReceiver;
-                    v.OnBeforeSerialize();
-                    value = (T)v;
                 }
                 catch (Exception ex)
                 {
